@@ -33,6 +33,7 @@ public struct LinkedList<Value> {
     // MARK: - Adding function
     
     // head-first insertion
+    
     public mutating func push(_ value: Value) {
         copyNodes()
         head = Node(value: value, next: head)
@@ -125,6 +126,23 @@ public struct LinkedList<Value> {
         return node.next?.value
     }
     
+    private mutating func copyNodes() {
+        guard var oldNode = head else {
+            return
+        }
+        
+        head = Node(value: oldNode.value)
+        var newNode = head
+        
+        while let nextOldNode = oldNode.next {
+            newNode!.next = Node(value: nextOldNode.value)
+            newNode = newNode!.next
+            
+            oldNode = nextOldNode
+        }
+        tail = newNode
+    }
+    
     // MARK: - Copy-On-Write realisation
     
     private mutating func copyNodes(returningCopyOf node: Node<Value>?) -> Node<Value>? {
@@ -147,7 +165,6 @@ public struct LinkedList<Value> {
             newNode = newNode!.next
             oldNode = nextOldNode
         }
-        
         return nodeCopy
     }
 }
@@ -202,5 +219,3 @@ extension LinkedList: Collection {
         position.node!.value
     }
 }
-
-
