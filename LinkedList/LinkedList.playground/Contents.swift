@@ -219,3 +219,74 @@ extension LinkedList: Collection {
         position.node!.value
     }
 }
+
+var list = LinkedList<Int>()
+list.push(4)
+list.push(3)
+list.push(2)
+list.push(1)
+
+// MARK: - Challenge 1: Print in reverse
+
+func reverseNodePrint<T>(_ node: Node<T>?) {
+    guard let node = node else { return }
+    reverseNodePrint(node.next)
+    print(node.value)
+}
+
+func reverseLinkedListPrint<T>(_ list: LinkedList<T>) {
+    reverseNodePrint(list.head)
+}
+
+// MARK: - Challenge 2: Find the middle node
+
+func getMiddleNode<T>(_ list: LinkedList<T>) -> Node<T>? {
+    var fast = list.head
+    var slow = list.head
+    
+    while let nextFast = fast?.next {
+        fast = nextFast.next
+        slow = slow?.next
+    }
+    
+    return slow
+}
+
+getMiddleNode(list)?.value
+
+// MARK: - Challenge 3: Reverse a linked list
+
+
+func reverseLinkedList<T>(_ linkedList: LinkedList<T>) -> LinkedList<T> {
+    var reversedLinkedList = LinkedList<T>()
+    var tempList = linkedList
+    while !linkedList.isEmpty {
+        guard let lastNode = tempList.removeLast() else { return reversedLinkedList }
+        reversedLinkedList.append(lastNode)
+    }
+    return reversedLinkedList
+}
+
+reverseLinkedList(list)
+
+// MARK: - Challenge 4: Merge two lists
+
+func mergeTwoLists<T>(_ leftList: LinkedList<T>, _ rightList: LinkedList<T>) -> LinkedList<T> {
+    
+    guard !leftList.isEmpty else { return rightList }
+    guard !rightList.isEmpty else { return leftList }
+    
+    var resultList = LinkedList<T>()
+    if var leftNode = leftList.head, var rightNode = rightList.head {
+        
+        while let currentLeftNode = leftNode, let rightNode = rightNode {
+            if currentLeftNode.value > rightNode.value {
+                resultList.append(rightNode)
+                rightNode = rightNode.next
+            } else {
+                resultList.append(currentLeftNode)
+                currentLeftNode = currentLeftNode.next
+            }
+        }
+    }
+}
